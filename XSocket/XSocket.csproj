@@ -12,7 +12,6 @@
       <Folder Include="Protocol\Inet\Xtcp\Handle" />
       <Folder Include="Protocol\Inet\Xtcp\Socket" />
       <Folder Include="Server" />
-      <Folder Include="Util" />
     </ItemGroup>
 
 </Project>
