@@ -50,5 +50,5 @@ public interface ISocket
     /// <param name="length">The number of bytes to receive</param>
     /// <param name="exactly">Weather to read exactly</param>
     /// <returns>Received data</returns>
-    public Task<byte[]> Receive(uint length, bool exactly = false);
+    public Task<byte[]> Receive(int length, bool exactly = false);
 }

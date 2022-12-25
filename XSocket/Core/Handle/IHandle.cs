@@ -66,7 +66,7 @@ public interface IHandle
     /// </summary>
     /// <param name="packets">Received packet</param>
     /// <returns>See docstring</returns>
-    public IEnumerable<uint> Unpack(IEnumerable<byte[]> packets);
+    public IEnumerable<int> Unpack(IEnumerable<byte[]> packets);
     
     /// <summary>
     /// Sends data to a connected Socket.
