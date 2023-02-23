@@ -1,12 +1,4 @@
-﻿/*
- * XSocket (version: 0.0.2a)
- * 
- * Copyright 2022. DuelitDev all rights reserved.
- * 
- * This Library is distributed under the LGPL-2.1 License.
- */
-
-using XSocket.Core.Handle;
+﻿using XSocket.Core.Handle;
 using XSocket.Core.Net;
 using XSocket.Protocol.Protocol;
 
@@ -48,6 +40,12 @@ public interface IListener
     /// </summary>
     /// <returns>ProtocolType</returns>
     public ProtocolType ProtocolType { get; }
+    
+    /// <summary>
+    /// Determines if there are pending connection requests.
+    /// </summary>
+    /// <returns>Boolean</returns>
+    public bool Pending { get; }
     
     /// <summary>
     /// Starts listening for incoming connection requests.

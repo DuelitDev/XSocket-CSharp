@@ -1,12 +1,4 @@
-﻿/*
- * XSocket (version: 0.0.2a)
- * 
- * Copyright 2022. DuelitDev all rights reserved.
- * 
- * This Library is distributed under the LGPL-2.1 License.
- */
-
-using XSocket.Core.Net;
+﻿using XSocket.Core.Net;
 using XSocket.Protocol.Protocol;
 using XSocket.Util;
 
@@ -66,7 +58,7 @@ public interface IHandle
     /// </summary>
     /// <param name="packets">Received packet</param>
     /// <returns>See docstring</returns>
-    public IEnumerable<int> Unpack(IEnumerable<byte[]> packets);
+    public IEnumerable<int> Unpack(List<List<byte>> packets);
     
     /// <summary>
     /// Sends data to a connected Socket.
