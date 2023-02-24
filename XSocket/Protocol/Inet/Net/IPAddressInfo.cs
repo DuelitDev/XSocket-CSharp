@@ -1,5 +1,6 @@
 using System.Net;
 using XSocket.Core.Net;
+using XSocket.Exception;
 
 namespace XSocket.Protocol.Inet.Net;
 
@@ -11,7 +12,7 @@ public class IPAddressInfo : AddressInfo
     public IPAddressInfo(string address, ushort port)
     {
         if (!IPAddress.TryParse(address, out _)) 
-            throw new FormatException("Address is invalid.");
+            throw new InvalidParameterException("Address is invalid.");
         Address = address;
         Port = port;
     }
