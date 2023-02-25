@@ -9,7 +9,7 @@ public abstract class AddressInfo
     /// Gets the address family.
     /// </summary>
     /// <returns>AddressFamily</returns>
-    public AddressFamily AddressFamily { get; }
+    public abstract AddressFamily AddressFamily { get; }
     
     /// <summary>
     /// Returns a hash code for the current object.

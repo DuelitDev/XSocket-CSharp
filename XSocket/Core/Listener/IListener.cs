@@ -24,6 +24,12 @@ public interface IListener
     public bool Closed { get; }
     
     /// <summary>
+    /// Determines if there are pending connection requests.
+    /// </summary>
+    /// <returns>Boolean</returns>
+    public bool Pending { get; }
+    
+    /// <summary>
     /// Gets the local endpoint.
     /// </summary>
     /// <returns>AddressInfo</returns>
@@ -40,13 +46,7 @@ public interface IListener
     /// </summary>
     /// <returns>ProtocolType</returns>
     public ProtocolType ProtocolType { get; }
-    
-    /// <summary>
-    /// Determines if there are pending connection requests.
-    /// </summary>
-    /// <returns>Boolean</returns>
-    public bool Pending { get; }
-    
+
     /// <summary>
     /// Starts listening for incoming connection requests.
     /// </summary>
