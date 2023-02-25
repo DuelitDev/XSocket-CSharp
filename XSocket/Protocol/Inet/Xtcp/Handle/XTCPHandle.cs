@@ -151,7 +151,7 @@ public class XTCPHandle : IHandle
     /// </summary>
     /// <param name="data">Data to send</param>
     /// <param name="opcode">Operation Code</param>
-    public async Task Send(byte[] data, OPCode opcode)
+    public async Task Send(byte[] data, OPCode opcode = OPCode.Data)
     {
         foreach (var packet in Pack(data, opcode))
             await _socket.Send(packet);

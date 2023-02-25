@@ -51,7 +51,7 @@ public interface IHandle
     /// <param name="data">Data to send</param>
     /// <param name="opcode">Operation code</param>
     /// <returns>Packet generator</returns>
-    public IEnumerable<byte[]> Pack(byte[] data, OPCode opcode);
+    public IEnumerable<byte[]> Pack(byte[] data, OPCode opcode = OPCode.Data);
     
     /// <summary>
     /// Read the header of the received packet and get the data.
