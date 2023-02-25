@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Sockets;
 using XSocket.Core.Net;
 using XSocket.Core.Socket;
 using XSocket.Protocol.Inet.Net;
@@ -73,7 +72,7 @@ public class XTCPSocket : ISocket
             await Task.Factory.FromAsync(
                 _socket.BeginReceive(
                     buffer, buffer.Length, length - buffer.Length, 
-                    SocketFlags.None, null, _socket), 
+                    System.Net.Sockets.SocketFlags.None, null, _socket), 
                 _socket.EndReceive);
             if (!exactly) break;
         }
