@@ -61,7 +61,7 @@ public class IPAddressInfo : AddressInfo
     /// Gets the address family.
     /// </summary>
     /// <returns>AddressFamily</returns>
-    public new AddressFamily AddressFamily => 
+    public override AddressFamily AddressFamily => 
         (AddressFamily)IPAddress.Parse(Address).AddressFamily;
 
     /// <summary>
