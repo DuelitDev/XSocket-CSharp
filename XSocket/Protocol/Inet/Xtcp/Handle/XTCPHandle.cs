@@ -1,9 +1,9 @@
-using SocketException = System.Net.Sockets.SocketException;
 using XSocket.Core.Handle;
 using XSocket.Core.Net;
+using XSocket.Exception;
 using XSocket.Protocol.Inet.Xtcp.Socket;
-using XSocket.Util;
 using XSocket.Protocol.Protocol;
+using XSocket.Util;
 
 namespace XSocket.Protocol.Inet.Xtcp.Handle;
 
@@ -132,7 +132,7 @@ public class XTCPHandle : IHandle
             var opcode = 15 & packets[^1][0];
             var size = 127 & packets[^1][1];
             var extend = size == 126;
-            if (rsv != 0) throw new FormatException("header is invalid.");
+            if (rsv != 0) throw new BrokenPipeException();
             packets[^1].Clear();
             if (extend)
             {
@@ -180,12 +180,12 @@ public class XTCPHandle : IHandle
                 if (Closed && opcode == OPCode.ConnectionClose)
                 {
                     await _close(true);
-                    throw new SocketException(10053);
+                    throw new ConnectionAbortedException();
                 }
                 await _close(false);
             }
             else if (opcode == OPCode.Continuation) 
-                throw new SocketException(10054);
+                throw new BrokenPipeException();
             temp.Add(new List<byte>());
         }
         return temp.SelectMany(x => x).ToArray();
