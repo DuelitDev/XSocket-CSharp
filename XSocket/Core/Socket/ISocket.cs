@@ -8,6 +8,13 @@ namespace XSocket.Core.Socket;
 public interface ISocket
 {
     /// <summary>
+    /// Gets a value indicating whether
+    /// the Socket for a Socket has been closed.
+    /// </summary>
+    /// <returns>bool</returns>
+    public bool Closed { get; }
+    
+    /// <summary>
     /// Get a low-level socket.
     /// </summary>
     /// <returns>Low-level socket</returns>
@@ -24,6 +31,13 @@ public interface ISocket
     /// </summary>
     /// <returns>AddressInfo</returns>
     public AddressInfo RemoteAddress { get; }
+    
+    /// <summary>
+    /// Create a new Socket with the address info.
+    /// </summary>
+    /// <param name="address">AddressInfo</param>
+    /// <returns>ISocket</returns>
+    public Task<ISocket> Create(AddressInfo address);
         
     /// <summary>
     /// Close the socket.

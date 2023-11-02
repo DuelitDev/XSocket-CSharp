@@ -3,10 +3,12 @@ using System.Net;
 using XSocket.Core.Handle;
 using XSocket.Core.Listener;
 using XSocket.Core.Net;
+using XSocket.Exception;
 using XSocket.Protocol.Inet.Net;
 using XSocket.Protocol.Inet.Xtcp.Handle;
 using XSocket.Protocol.Inet.Xtcp.Socket;
 using XSocket.Protocol.Protocol;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace XSocket.Protocol.Inet.Xtcp.Listener;
 
@@ -83,6 +85,7 @@ public class XTCPListener : IListener
     /// </summary>
     public void Run()
     {
+        if (Running || Closed) return;
         _socket = new System.Net.Sockets.Socket(
             (System.Net.Sockets.AddressFamily)AddressFamily,
             System.Net.Sockets.SocketType.Stream, 
@@ -99,8 +102,7 @@ public class XTCPListener : IListener
     /// </summary>
     public void Close()
     {
-        if (!Running)
-            throw new InvalidOperationException("Listener in not running.");
+        if (!Running || Closed) return;
         _socket!.Close();
         Running = false;
         Closed = true;
@@ -112,14 +114,7 @@ public class XTCPListener : IListener
     /// <returns>XTCPHandle</returns>
     public async Task<IHandle> Connect()
     {
-        var socket = new System.Net.Sockets.Socket(
-            (System.Net.Sockets.AddressFamily)AddressFamily,
-            System.Net.Sockets.SocketType.Stream, 
-            System.Net.Sockets.ProtocolType.Tcp);
-        socket.LingerState = new System.Net.Sockets.LingerOption(true, 0);
-        socket.Blocking = true;
-        await socket.ConnectAsync((IPEndPoint)_address);
-        return new XTCPHandle(new XTCPSocket(socket));
+        return await XTCPHandle.Create(_address);
     }
 
     /// <summary>
@@ -128,8 +123,7 @@ public class XTCPListener : IListener
     /// <returns>XTCPHandle</returns>
     public async Task<IHandle> Accept()
     {
-        if (!Running)
-            throw new InvalidOperationException("Listener in not running.");
+        if (!Running || Closed) throw new ListenerClosedException();
         var socket = await _socket!.AcceptAsync();
         socket.LingerState = new System.Net.Sockets.LingerOption(true, 0);
         socket.Blocking = false;

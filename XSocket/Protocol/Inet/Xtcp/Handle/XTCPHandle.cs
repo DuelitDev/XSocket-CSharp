@@ -1,6 +1,7 @@
 using XSocket.Core.Handle;
 using XSocket.Core.Net;
 using XSocket.Exception;
+using XSocket.Protocol.Inet.Net;
 using XSocket.Protocol.Inet.Xtcp.Socket;
 using XSocket.Protocol.Protocol;
 using XSocket.Util;
@@ -49,13 +50,27 @@ public class XTCPHandle : IHandle
     /// </summary>
     /// <returns>ProtocolType</returns>
     public ProtocolType ProtocolType => ProtocolType.Xtcp;
+
+    /// <summary>
+    /// Create a new XTCPHandle with the IP address info.
+    /// </summary>
+    /// <param name="address">IPAddressInfo</param>
+    /// <returns>XTCPHandle</returns>
+    public static async Task<XTCPHandle> Create(IPAddressInfo address) 
+    {
+        return new XTCPHandle(await XTCPSocket.Create(address));
+    } async Task<IHandle> IHandle.Create(AddressInfo address) {
+        return await Create((address as IPAddressInfo)!);
+    }
     
     /// <summary>
     /// Closes the Socket connection.
     /// </summary>
     public async Task Close()
     {
+        if (Closed) return;
         await _close(false);
+        Closed = true;
     }
     
     /// <summary>
@@ -70,7 +85,6 @@ public class XTCPHandle : IHandle
             return;
         }
         await Send(Array.Empty<byte>(), OPCode.ConnectionClose);
-        Closed = true;
     }
 
     /// <summary>
@@ -79,7 +93,7 @@ public class XTCPHandle : IHandle
     /// <param name="data">Data to send</param>
     /// <param name="opcode">Data type</param>
     /// <returns>Packet generator</returns>
-    public IEnumerable<byte[]> Pack(byte[] data, OPCode opcode)
+    public static IEnumerable<byte[]> Pack(byte[] data, OPCode opcode)
     {
         const byte fin = 128;
         switch (data.Length)
@@ -120,6 +134,8 @@ public class XTCPHandle : IHandle
                 break;
             }
         }
+    } IEnumerable<byte[]> IHandle.Pack(byte[] data, OPCode opcode) {
+        return Pack(data, opcode);
     }
 
     public IEnumerable<int> Unpack(List<List<byte>> packets)
@@ -132,7 +148,7 @@ public class XTCPHandle : IHandle
             var opcode = 15 & packets[^1][0];
             var size = 127 & packets[^1][1];
             var extend = size == 126;
-            if (rsv != 0) throw new BrokenPipeException();
+            if (rsv != 0) throw new Exception.InvalidOperationException();
             packets[^1].Clear();
             if (extend)
             {
@@ -144,6 +160,8 @@ public class XTCPHandle : IHandle
             yield return opcode;
             if (fin == 1) break;
         }
+    } IEnumerable<int> IHandle.Unpack(List<List<byte>> packets) {
+        return Unpack(packets);
     }
 
     /// <summary>
@@ -153,6 +171,7 @@ public class XTCPHandle : IHandle
     /// <param name="opcode">Operation Code</param>
     public async Task Send(byte[] data, OPCode opcode = OPCode.Data)
     {
+        if (Closed) throw new HandleClosedException();
         foreach (var packet in Pack(data, opcode))
             await _socket.Send(packet);
     }
@@ -163,6 +182,7 @@ public class XTCPHandle : IHandle
     /// <returns>Received data</returns>
     public async Task<byte[]> Receive()
     {
+        if (Closed) throw new HandleClosedException();
         OPCode? opcode = null;
         var temp = new List<List<byte>>();
         var counter = 0;
@@ -185,7 +205,7 @@ public class XTCPHandle : IHandle
                 await _close(false);
             }
             else if (opcode == OPCode.Continuation) 
-                throw new BrokenPipeException();
+                throw new Exception.InvalidOperationException();
             temp.Add(new List<byte>());
         }
         return temp.SelectMany(x => x).ToArray();

@@ -39,6 +39,13 @@ public interface IHandle
     /// </summary>
     /// <returns>ProtocolType</returns>
     public ProtocolType ProtocolType { get; }
+    
+    /// <summary>
+    /// Create a new Handle with the address info.
+    /// </summary>
+    /// <param name="address">AddressInfo</param>
+    /// <returns>IHandle</returns>
+    public Task<IHandle> Create(AddressInfo address);
 
     /// <summary>
     /// Closes the Socket connection.
