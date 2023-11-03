@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices.JavaScript;
 using XSocket.Core.Net;
 using XSocket.Core.Socket;
 using XSocket.Exception;
@@ -105,13 +106,14 @@ public class XTCPSocket : ISocket
     public async Task<byte[]> Receive(int length, bool exactly = false)
     {
         if (Closed) throw new SocketClosedException();
-        var buffer = Array.Empty<byte>();
-        while(buffer.Length < length)
+        var received = 0;
+        var buffer = new byte[length];
+        while(received < length)
         {
-            await Task.Factory.FromAsync(
+            received += await Task.Factory.FromAsync(
                 _socket.BeginReceive(
-                    buffer, buffer.Length, length - buffer.Length, 
-                    System.Net.Sockets.SocketFlags.None, null, _socket), 
+                    buffer, received, length - received, 
+                    SocketFlags.None, null, _socket), 
                 _socket.EndReceive);
             if (!exactly) break;
         }

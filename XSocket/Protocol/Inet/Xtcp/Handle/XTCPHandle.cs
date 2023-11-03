@@ -184,7 +184,7 @@ public class XTCPHandle : IHandle
     {
         if (Closed) throw new HandleClosedException();
         OPCode? opcode = null;
-        var temp = new List<List<byte>>();
+        var temp = new List<List<byte>> { new() };
         var counter = 0;
         foreach (var packet in Unpack(temp))
         {
