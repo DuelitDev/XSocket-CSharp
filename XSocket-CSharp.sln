@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSocket", "XSocket\XSocket.csproj", "{E5C09525-8AE2-4961-9DE8-3303E7B09D3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{984753F9-00F8-4E58-B85C-704DFD08069D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,9 +12,5 @@ Global
 		{E5C09525-8AE2-4961-9DE8-3303E7B09D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5C09525-8AE2-4961-9DE8-3303E7B09D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5C09525-8AE2-4961-9DE8-3303E7B09D3D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{984753F9-00F8-4E58-B85C-704DFD08069D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{984753F9-00F8-4E58-B85C-704DFD08069D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{984753F9-00F8-4E58-B85C-704DFD08069D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{984753F9-00F8-4E58-B85C-704DFD08069D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
