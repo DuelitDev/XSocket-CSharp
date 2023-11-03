@@ -1,5 +1,10 @@
 namespace XSocket.Util;
 
+/// <summary>
+/// Represents a lightweight alternative to SemaphoreSlim that limits
+/// the number of threads that can access a resource or pool of
+/// resources concurrently.
+/// </summary>
 public sealed class AsyncLock
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);

@@ -2,6 +2,9 @@ using XSocket.Events;
 
 namespace XSocket.Client;
 
+/// <summary>
+/// Represents the method that will handle an events.
+/// </summary>
 public class ClientEventWrapper
 {
     public event EventHandler<OnOpenEventArgs>? OnOpen;

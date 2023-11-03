@@ -9,6 +9,9 @@ using XSocket.Util;
 
 namespace XSocket.Server;
 
+/// <summary>
+/// Listens for connections from network clients.
+/// </summary>
 public class Server
 {
     private readonly IListener _listener;
@@ -23,18 +26,45 @@ public class Server
         _listener = listener;
     }
 
+    /// <summary>
+    /// Gets a value indicating whether Server is running.
+    /// </summary>
+    /// <returns>bool</returns>
     public bool Running { get; private set; } = false;
 
+    /// <summary>
+    /// Gets a value indicating whether Server has been closed.
+    /// </summary>
+    /// <returns>bool</returns>
     public bool Closed { get; private set; } = false;
 
+    /// <summary>
+    /// Gets the local endpoint.
+    /// </summary>
+    /// <returns>AddressInfo</returns>
     public AddressInfo LocalAddress => _listener.LocalAddress;
 
+    /// <summary>
+    /// Gets the address family of the Socket.
+    /// </summary>
+    /// <returns>AddressFamily</returns>
     public AddressFamily AddressFamily => _listener.AddressFamily;
 
+    /// <summary>
+    /// Gets the protocol type of the Listener.
+    /// </summary>
+    /// <returns>ProtocolType</returns>
     public ProtocolType ProtocolType => _listener.ProtocolType;
     
+    /// <summary>
+    /// Represents the method that will handle an events.
+    /// </summary>
+    /// <returns>ServerEventWrapper</returns>
     public ServerEventWrapper Event { get; } = new();
 
+    /// <summary>
+    /// Starts listening for incoming connection requests.
+    /// </summary>
     public async Task Run()
     {
         if (Running || Closed) return;
@@ -43,6 +73,9 @@ public class Server
         _task = Task.Run(async () => { await Wrapper(); });
     }
 
+    /// <summary>
+    /// Close all client connections and server.
+    /// </summary>
     public async Task Close()
     {
         if (!Running || Closed) return;
@@ -87,6 +120,10 @@ public class Server
         }
     }
     
+    /// <summary>
+    /// Send data to all clients.
+    /// </summary>
+    /// <param name="data">Data to send</param>
     public async Task Broadcast(IEnumerable<byte> data)
     {
         if (!Running || Closed) throw new ServerClosedException();
@@ -94,6 +131,11 @@ public class Server
         await Task.WhenAll(_clients.Values.Select(client => client.Send(tmp)));
     }
 
+    /// <summary>
+    /// Send string to all clients.
+    /// </summary>
+    /// <param name="str">String to send</param>
+    /// <param name="encode">String encoding</param>
     public async Task BroadcastString(string str, string encode = "UTF-8")
     {
         await Broadcast(Encoding.GetEncoding(encode).GetBytes(str));
